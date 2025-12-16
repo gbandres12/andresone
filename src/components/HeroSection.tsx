@@ -1,7 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRef } from "react";
+import heroImage from "@/assets/hero-astronaut.png";
 
 const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,75 +11,78 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  // Parallax effects for background elements
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -250]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-hero-gradient"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Parallax background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          style={{ y: y1 }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px]"
+      {/* Background Image with Parallax */}
+      <motion.div
+        style={{ y, scale }}
+        className="absolute inset-0 z-0"
+      >
+        <img
+          src={heroImage}
+          alt="Astronauta em espaço futurístico"
+          className="w-full h-full object-cover object-center"
         />
-        <motion.div
-          style={{ y: y2 }}
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-[100px]"
-        />
-        <motion.div
-          style={{ y: y3 }}
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-purple-glow/10 rounded-full blur-[80px]"
-        />
-        
-        {/* Floating particles */}
-        {[...Array(6)].map((_, i) => (
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-background/70" />
+      </motion.div>
+
+      {/* Floating particles */}
+      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: [0.2, 0.5, 0.2],
-              y: [0, -30, 0],
-              x: [0, 10, 0],
+            animate={{
+              opacity: [0.1, 0.5, 0.1],
+              y: [0, -100, 0],
+              x: [0, Math.random() * 50 - 25, 0],
             }}
             transition={{
-              duration: 4 + i,
+              duration: 8 + Math.random() * 6,
               repeat: Infinity,
-              delay: i * 0.5,
+              delay: i * 0.3,
             }}
-            className="absolute w-2 h-2 bg-primary/40 rounded-full"
+            className="absolute w-1 h-1 bg-primary rounded-full"
             style={{
-              top: `${20 + i * 15}%`,
-              left: `${10 + i * 15}%`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              boxShadow: "0 0 10px hsl(var(--primary))",
             }}
           />
         ))}
       </div>
 
-      {/* Grid pattern overlay with parallax */}
+      {/* Glowing orbs */}
       <motion.div
-        style={{ y: y1, opacity }}
-        className="absolute inset-0 opacity-[0.03]"
-        initial={{ backgroundSize: "60px 60px" }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
-          }}
-        />
-      </motion.div>
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 4, repeat: Infinity }}
+        className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/30 rounded-full blur-[100px] z-5"
+      />
+      <motion.div
+        animate={{
+          scale: [1.2, 1, 1.2],
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-[120px] z-5"
+      />
 
       <motion.div
-        style={{ opacity, scale }}
-        className="container mx-auto px-4 relative z-10"
+        style={{ y: textY, opacity }}
+        className="container mx-auto px-4 relative z-20"
       >
         <motion.div
           initial={{ opacity: 0, y: 60 }}
@@ -86,69 +90,77 @@ const HeroSection = () => {
           transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="text-center max-w-5xl mx-auto"
         >
+          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary mb-8"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-primary mb-8"
           >
             <motion.div
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            >
+              <Rocket size={18} />
+            </motion.div>
+            <span className="text-sm font-semibold tracking-wide">
+              Tecnologia para o seu negócio crescer
+            </span>
+            <motion.div
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
             >
               <Sparkles size={16} />
             </motion.div>
-            <span className="text-sm font-medium">
-              Tecnologia para o seu negócio crescer
-            </span>
           </motion.div>
 
+          {/* Main Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="text-5xl md:text-6xl lg:text-8xl font-bold mb-8 leading-[1.1] tracking-tight"
           >
             <motion.span
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-foreground inline-block"
+              className="text-foreground block"
             >
               Do Ponto de Venda à
             </motion.span>
-            <br />
             <motion.span
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="text-gradient inline-block"
+              className="text-gradient block mt-2"
             >
               Inteligência Artificial
             </motion.span>
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.9 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 leading-relaxed"
+            transition={{ duration: 0.7, delay: 1 }}
+            className="text-lg md:text-xl lg:text-2xl text-foreground/80 max-w-3xl mx-auto mb-12 leading-relaxed font-light"
           >
             Tenha controle total com nossos{" "}
-            <strong className="text-foreground">Sistemas de PDV</strong> e
-            impulsione seus resultados com soluções personalizadas de{" "}
-            <strong className="text-foreground">Inteligência Artificial</strong>.
-            A Andres Tech une gestão robusta com inovação.
+            <strong className="text-foreground font-semibold">Sistemas de PDV</strong> e
+            impulsione seus resultados com{" "}
+            <strong className="text-foreground font-semibold">Inteligência Artificial</strong>.
           </motion.p>
 
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            transition={{ duration: 0.6, delay: 1.2 }}
+            className="flex flex-col sm:flex-row gap-5 justify-center items-center"
           >
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
               <Button
@@ -160,7 +172,7 @@ const HeroSection = () => {
                     "_blank"
                   )
                 }
-                className="group"
+                className="group shadow-2xl shadow-[hsl(142_70%_45%/0.3)]"
               >
                 Agende uma Demonstração
                 <ArrowRight
@@ -170,7 +182,7 @@ const HeroSection = () => {
               </Button>
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
               <Button
@@ -181,10 +193,34 @@ const HeroSection = () => {
                     .getElementById("solucoes")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
+                className="backdrop-blur-xl border-foreground/30"
               >
                 Conheça Nossas Soluções
               </Button>
             </motion.div>
+          </motion.div>
+
+          {/* Trust indicators */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 0.8 }}
+            className="mt-16 flex items-center justify-center gap-8 text-muted-foreground/60"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-sm font-medium">Suporte 24/7</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-muted-foreground/30" />
+            <div className="hidden sm:flex items-center gap-2">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+              <span className="text-sm font-medium">+50 Clientes Ativos</span>
+            </div>
+            <div className="hidden md:block w-px h-4 bg-muted-foreground/30" />
+            <div className="hidden md:flex items-center gap-2">
+              <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+              <span className="text-sm font-medium">IA Personalizada</span>
+            </div>
           </motion.div>
         </motion.div>
       </motion.div>
@@ -193,25 +229,28 @@ const HeroSection = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        transition={{ delay: 2 }}
         style={{ opacity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
       >
         <motion.div
-          animate={{ y: [0, 10, 0] }}
+          animate={{ y: [0, 12, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2"
+          className="flex flex-col items-center gap-2"
         >
-          <motion.div
-            animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1.5 h-1.5 bg-primary rounded-full"
-          />
+          <span className="text-xs text-muted-foreground/60 uppercase tracking-widest">Scroll</span>
+          <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
+            <motion.div
+              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-1.5 h-1.5 bg-primary rounded-full"
+            />
+          </div>
         </motion.div>
       </motion.div>
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
     </section>
   );
 };
