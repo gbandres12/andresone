@@ -168,7 +168,7 @@ const Footer = () => {
                   },
                   {
                     icon: MapPin,
-                    text: "Manaus, Amazonas - Brasil",
+                    text: "Santarém, Pará - Brasil",
                     href: null,
                   },
                 ].map((item, i) => (

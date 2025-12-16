@@ -5,20 +5,24 @@ import SolutionsSection from "@/components/SolutionsSection";
 import UseCasesSection from "@/components/UseCasesSection";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <HeroSection />
-        <BenefitsSection />
-        <SolutionsSection />
-        <UseCasesSection />
-        <AboutSection />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <SEOHead />
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main role="main">
+          <HeroSection />
+          <BenefitsSection />
+          <SolutionsSection />
+          <UseCasesSection />
+          <AboutSection />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 
