@@ -3,9 +3,11 @@ import { ArrowRight, Sparkles, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRef } from "react";
 import heroImage from "@/assets/hero-astronaut.png";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t, language } = useLanguage();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -15,6 +17,10 @@ const HeroSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
+  const whatsappMessage = language === "pt" 
+    ? "Olá! Gostaria de agendar uma demonstração."
+    : "Hello! I would like to schedule a demonstration.";
 
   return (
     <section
@@ -28,7 +34,7 @@ const HeroSection = () => {
       >
         <img
           src={heroImage}
-          alt="Astronauta em espaço futurístico"
+          alt={t.hero.heroImageAlt}
           className="w-full h-full object-cover object-center"
         />
         {/* Dark overlay for better text readability */}
@@ -104,7 +110,7 @@ const HeroSection = () => {
               <Rocket size={18} />
             </motion.div>
             <span className="text-sm font-semibold tracking-wide">
-              Tecnologia para o seu negócio crescer
+              {t.hero.badge}
             </span>
             <motion.div
               animate={{ scale: [1, 1.3, 1] }}
@@ -127,7 +133,7 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="text-foreground block"
             >
-              Do Ponto de Venda à
+              {t.hero.title1}
             </motion.span>
             <motion.span
               initial={{ opacity: 0, x: 50 }}
@@ -135,7 +141,7 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.8 }}
               className="text-gradient block mt-2"
             >
-              Inteligência Artificial
+              {t.hero.title2}
             </motion.span>
           </motion.h1>
 
@@ -146,10 +152,10 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 1 }}
             className="text-lg md:text-xl lg:text-2xl text-foreground/80 max-w-3xl mx-auto mb-12 leading-relaxed font-light"
           >
-            Tenha controle total com nossos{" "}
-            <strong className="text-foreground font-semibold">Sistemas de PDV</strong> e
-            impulsione seus resultados com{" "}
-            <strong className="text-foreground font-semibold">Inteligência Artificial</strong>.
+            {t.hero.subtitle}{" "}
+            <strong className="text-foreground font-semibold">{t.hero.subtitleBold1}</strong>{" "}
+            {t.hero.subtitleAnd}{" "}
+            <strong className="text-foreground font-semibold">{t.hero.subtitleBold2}</strong>.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -168,13 +174,13 @@ const HeroSection = () => {
                 size="xl"
                 onClick={() =>
                   window.open(
-                    "https://wa.me/5592995096571?text=Olá! Gostaria de agendar uma demonstração.",
+                    `https://wa.me/5592995096571?text=${encodeURIComponent(whatsappMessage)}`,
                     "_blank"
                   )
                 }
                 className="group shadow-2xl shadow-[hsl(142_70%_45%/0.3)]"
               >
-                Agende uma Demonstração
+                {t.hero.ctaDemo}
                 <ArrowRight
                   className="group-hover:translate-x-1 transition-transform"
                   size={20}
@@ -195,7 +201,7 @@ const HeroSection = () => {
                 }
                 className="backdrop-blur-xl border-foreground/30"
               >
-                Conheça Nossas Soluções
+                {t.hero.ctaSolutions}
               </Button>
             </motion.div>
           </motion.div>
@@ -209,17 +215,17 @@ const HeroSection = () => {
           >
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium">Suporte 24/7</span>
+              <span className="text-sm font-medium">{t.hero.support}</span>
             </div>
             <div className="hidden sm:block w-px h-4 bg-muted-foreground/30" />
             <div className="hidden sm:flex items-center gap-2">
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <span className="text-sm font-medium">+50 Clientes Ativos</span>
+              <span className="text-sm font-medium">{t.hero.clients}</span>
             </div>
             <div className="hidden md:block w-px h-4 bg-muted-foreground/30" />
             <div className="hidden md:flex items-center gap-2">
               <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-sm font-medium">IA Personalizada</span>
+              <span className="text-sm font-medium">{t.hero.customAi}</span>
             </div>
           </motion.div>
         </motion.div>
@@ -238,7 +244,7 @@ const HeroSection = () => {
           transition={{ duration: 1.5, repeat: Infinity }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="text-xs text-muted-foreground/60 uppercase tracking-widest">Scroll</span>
+          <span className="text-xs text-muted-foreground/60 uppercase tracking-widest">{t.hero.scroll}</span>
           <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
             <motion.div
               animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}

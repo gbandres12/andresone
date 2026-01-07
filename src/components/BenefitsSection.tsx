@@ -1,27 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Store, Bot, TrendingUp } from "lucide-react";
 import { useRef } from "react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
-const benefits = [
-  {
-    icon: Store,
-    title: "Controle Total (PDV)",
-    description:
-      "Gerencie estoque, vendas e financeiro com um PDV rápido, seguro e fácil de usar. Chega de furos no caixa.",
-  },
-  {
-    icon: Bot,
-    title: "Automação Inteligente (IA)",
-    description:
-      "Reduza tarefas manuais e repetitivas com Inteligência Artificial criada sob medida para sua operação.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Decisões Estratégicas",
-    description:
-      "Una os dados do seu comercial com a análise da IA para vender mais e errar menos.",
-  },
-];
+const icons = [Store, Bot, TrendingUp];
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -49,6 +31,7 @@ const itemVariants = {
 
 const BenefitsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -83,8 +66,8 @@ const BenefitsSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
           >
-            Gestão eficiente <span className="text-gradient">hoje</span>,
-            inovação para <span className="text-gradient">amanhã</span>
+            {t.benefits.title1} <span className="text-gradient">{t.benefits.titleToday}</span>,{" "}
+            {t.benefits.title2} <span className="text-gradient">{t.benefits.titleTomorrow}</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -93,8 +76,7 @@ const BenefitsSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-muted-foreground text-lg max-w-2xl mx-auto"
           >
-            Conectamos as necessidades do seu negócio com soluções tecnológicas
-            de ponta
+            {t.benefits.subtitle}
           </motion.p>
         </motion.div>
 
@@ -105,47 +87,50 @@ const BenefitsSection = () => {
           viewport={{ once: true, margin: "-50px" }}
           className="grid md:grid-cols-3 gap-8"
         >
-          {benefits.map((benefit, index) => (
-            <motion.div
-              key={benefit.title}
-              variants={itemVariants}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="group"
-            >
-              <div className="relative p-8 rounded-2xl bg-card-gradient border border-border/50 h-full transition-all duration-500 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 overflow-hidden">
-                {/* Animated gradient overlay on hover */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileHover={{ opacity: 1, scale: 1 }}
-                  className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"
-                />
+          {t.benefits.items.map((benefit, index) => {
+            const Icon = icons[index];
+            return (
+              <motion.div
+                key={benefit.title}
+                variants={itemVariants}
+                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                className="group"
+              >
+                <div className="relative p-8 rounded-2xl bg-card-gradient border border-border/50 h-full transition-all duration-500 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 overflow-hidden">
+                  {/* Animated gradient overlay on hover */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileHover={{ opacity: 1, scale: 1 }}
+                    className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"
+                  />
 
-                <motion.div
-                  initial={{ scale: 1 }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 relative z-10"
-                >
-                  <benefit.icon className="w-7 h-7 text-primary" />
-                </motion.div>
+                  <motion.div
+                    initial={{ scale: 1 }}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 relative z-10"
+                  >
+                    <Icon className="w-7 h-7 text-primary" />
+                  </motion.div>
 
-                <h3 className="text-xl font-semibold mb-3 text-foreground relative z-10">
-                  {benefit.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed relative z-10">
-                  {benefit.description}
-                </p>
+                  <h3 className="text-xl font-semibold mb-3 text-foreground relative z-10">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed relative z-10">
+                    {benefit.description}
+                  </p>
 
-                {/* Corner decoration */}
-                <motion.div
-                  initial={{ opacity: 0, x: 20, y: 20 }}
-                  whileInView={{ opacity: 0.1, x: 0, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                  className="absolute -bottom-4 -right-4 w-24 h-24 border-2 border-primary rounded-full"
-                />
-              </div>
-            </motion.div>
-          ))}
+                  {/* Corner decoration */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 20, y: 20 }}
+                    whileInView={{ opacity: 0.1, x: 0, y: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="absolute -bottom-4 -right-4 w-24 h-24 border-2 border-primary rounded-full"
+                  />
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
