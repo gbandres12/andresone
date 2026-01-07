@@ -3,9 +3,11 @@ import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "./ui/button";
 import logo from "@/assets/logo-andres.png";
 import { useRef } from "react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const Footer = () => {
   const ctaRef = useRef<HTMLDivElement>(null);
+  const { t, language } = useLanguage();
   const { scrollYProgress } = useScroll({
     target: ctaRef,
     offset: ["start end", "end start"],
@@ -13,6 +15,35 @@ const Footer = () => {
 
   const backgroundScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1]);
   const backgroundOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+
+  const whatsappMessage = language === "pt" 
+    ? "Olá! Gostaria de falar com um consultor."
+    : "Hello! I would like to talk to a consultant.";
+
+  const quickLinks = [
+    { id: "beneficios", label: t.nav.benefits },
+    { id: "solucoes", label: t.nav.solutions },
+    { id: "casos", label: t.nav.useCases },
+    { id: "sobre", label: t.nav.about },
+  ];
+
+  const contactInfo = [
+    {
+      icon: Phone,
+      text: "(92) 99509-6571",
+      href: "tel:+5592995096571",
+    },
+    {
+      icon: Mail,
+      text: "contato@andrestech.com.br",
+      href: "mailto:contato@andrestech.com.br",
+    },
+    {
+      icon: MapPin,
+      text: t.footer.location,
+      href: null,
+    },
+  ];
 
   return (
     <footer className="relative overflow-hidden">
@@ -40,9 +71,9 @@ const Footer = () => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground"
             >
-              Sua empresa pronta para{" "}
-              <span className="text-gradient">vender mais</span> e{" "}
-              <span className="text-gradient">operar melhor</span>?
+              {t.footer.ctaTitle}{" "}
+              <span className="text-gradient">{t.footer.ctaHighlight1}</span> {t.footer.ctaAnd}{" "}
+              <span className="text-gradient">{t.footer.ctaHighlight2}</span>?
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -51,8 +82,7 @@ const Footer = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-muted-foreground text-lg mb-10"
             >
-              Fale com nossos consultores e descubra como a Andres Tech pode
-              transformar seu negócio.
+              {t.footer.ctaSubtitle}
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -67,13 +97,13 @@ const Footer = () => {
                 size="xl"
                 onClick={() =>
                   window.open(
-                    "https://wa.me/5592995096571?text=Olá! Gostaria de falar com um consultor.",
+                    `https://wa.me/5592995096571?text=${encodeURIComponent(whatsappMessage)}`,
                     "_blank"
                   )
                 }
                 className="group"
               >
-                Falar com Consultor
+                {t.footer.ctaButton}
                 <ArrowRight
                   className="group-hover:translate-x-1 transition-transform"
                   size={20}
@@ -107,8 +137,7 @@ const Footer = () => {
                 className="h-12 w-auto mb-4"
               />
               <p className="text-muted-foreground text-sm">
-                Tecnologia completa para o seu negócio. Do PDV à Inteligência
-                Artificial.
+                {t.footer.tagline}
               </p>
             </motion.div>
 
@@ -119,28 +148,22 @@ const Footer = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <h4 className="text-foreground font-semibold mb-4">
-                Links Rápidos
+                {t.footer.quickLinks}
               </h4>
               <ul className="space-y-2">
-                {["beneficios", "solucoes", "casos", "sobre"].map((link, i) => (
+                {quickLinks.map((link, i) => (
                   <motion.li
-                    key={link}
+                    key={link.id}
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.05 }}
                   >
                     <a
-                      href={`#${link}`}
+                      href={`#${link.id}`}
                       className="text-muted-foreground hover:text-foreground transition-colors text-sm"
                     >
-                      {link === "beneficios"
-                        ? "Benefícios"
-                        : link === "solucoes"
-                        ? "Soluções"
-                        : link === "casos"
-                        ? "Casos de Uso"
-                        : "Sobre Nós"}
+                      {link.label}
                     </a>
                   </motion.li>
                 ))}
@@ -153,25 +176,9 @@ const Footer = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <h4 className="text-foreground font-semibold mb-4">Contato</h4>
+              <h4 className="text-foreground font-semibold mb-4">{t.footer.contact}</h4>
               <ul className="space-y-3">
-                {[
-                  {
-                    icon: Phone,
-                    text: "(92) 99509-6571",
-                    href: "tel:+5592995096571",
-                  },
-                  {
-                    icon: Mail,
-                    text: "contato@andrestech.com.br",
-                    href: "mailto:contato@andrestech.com.br",
-                  },
-                  {
-                    icon: MapPin,
-                    text: "Santarém, Pará - Brasil",
-                    href: null,
-                  },
-                ].map((item, i) => (
+                {contactInfo.map((item, i) => (
                   <motion.li
                     key={item.text}
                     initial={{ opacity: 0, x: 10 }}
@@ -205,8 +212,7 @@ const Footer = () => {
             className="pt-8 border-t border-border/50 text-center"
           >
             <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} Andres Technologies. Todos os
-              direitos reservados.
+              © {new Date().getFullYear()} {t.footer.copyright}
             </p>
           </motion.div>
         </div>

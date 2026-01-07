@@ -1,32 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Monitor, Brain, Lightbulb, Check } from "lucide-react";
 import { useRef } from "react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
-const solutions = [
-  {
-    icon: Monitor,
-    title: "Automação Comercial & PDV",
-    description:
-      "O coração da sua loja. Oferecemos sistemas robustos para frente de caixa, emissão fiscal (NFC-e/NF-e), controle de estoque rigoroso e gestão financeira integrada. Ideal para mercados, varejo e comércio em geral.",
-    features: ["Emissão Fiscal Rápida", "Controle de Estoque", "Relatórios Financeiros"],
-    gradient: "from-primary/20 to-primary/5",
-  },
-  {
-    icon: Brain,
-    title: "Desenvolvimento de IA Sob Medida",
-    description:
-      "Levamos sua empresa para o próximo nível. Desenvolvemos agentes de IA, chatbots avançados para atendimento e algoritmos que automatizam processos complexos do seu escritório ou operação.",
-    features: ["Chatbots de Atendimento", "Automação de Processos", "Análise de Dados"],
-    gradient: "from-accent/20 to-accent/5",
-  },
-  {
-    icon: Lightbulb,
-    title: "Integração e Consultoria",
-    description:
-      "Não sabe por onde começar? Analisamos seu negócio para implementar o sistema de PDV ideal e identificar onde a IA pode trazer mais lucro para sua operação.",
-    features: ["Diagnóstico Completo", "Implementação Guiada", "Suporte Contínuo"],
-    gradient: "from-cyan-accent/20 to-cyan-accent/5",
-  },
+const icons = [Monitor, Brain, Lightbulb];
+const gradients = [
+  "from-primary/20 to-primary/5",
+  "from-accent/20 to-accent/5",
+  "from-cyan-accent/20 to-cyan-accent/5",
 ];
 
 const cardVariants = {
@@ -57,6 +38,7 @@ const featureVariants = {
 
 const SolutionsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -96,7 +78,7 @@ const SolutionsSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground"
           >
-            Nossas <span className="text-gradient">Tecnologias</span>
+            {t.solutions.title} <span className="text-gradient">{t.solutions.titleHighlight}</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -105,110 +87,114 @@ const SolutionsSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-muted-foreground text-lg max-w-2xl mx-auto"
           >
-            Soluções completas que se complementam para transformar seu negócio
+            {t.solutions.subtitle}
           </motion.p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8" style={{ perspective: "1000px" }}>
-          {solutions.map((solution, index) => (
-            <motion.div
-              key={solution.title}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              whileHover={{ 
-                y: -12, 
-                scale: 1.02,
-                transition: { duration: 0.3 } 
-              }}
-              className="group"
-            >
-              <div className="relative h-full rounded-2xl border border-border/50 bg-card overflow-hidden transition-all duration-500 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
-                {/* Top gradient bar with animation */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.15 }}
-                  className={`h-1.5 bg-gradient-to-r ${solution.gradient} origin-left`}
-                />
-
-                <div className="p-8">
+          {t.solutions.items.map((solution, index) => {
+            const Icon = icons[index];
+            const gradient = gradients[index];
+            return (
+              <motion.div
+                key={solution.title}
+                custom={index}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{ 
+                  y: -12, 
+                  scale: 1.02,
+                  transition: { duration: 0.3 } 
+                }}
+                className="group"
+              >
+                <div className="relative h-full rounded-2xl border border-border/50 bg-card overflow-hidden transition-all duration-500 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
+                  {/* Top gradient bar with animation */}
                   <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 200,
-                      delay: 0.2 + index * 0.15,
-                    }}
-                    whileHover={{ scale: 1.15, rotate: 10 }}
-                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center mb-6"
-                  >
-                    <solution.icon className="w-8 h-8 text-primary" />
-                  </motion.div>
+                    transition={{ duration: 0.6, delay: 0.3 + index * 0.15 }}
+                    className={`h-1.5 bg-gradient-to-r ${gradient} origin-left`}
+                  />
 
-                  <motion.h3
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 + index * 0.15 }}
-                    className="text-2xl font-bold mb-4 text-foreground"
-                  >
-                    {solution.title}
-                  </motion.h3>
+                  <div className="p-8">
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      whileInView={{ scale: 1, rotate: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        delay: 0.2 + index * 0.15,
+                      }}
+                      whileHover={{ scale: 1.15, rotate: 10 }}
+                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center mb-6"
+                    >
+                      <Icon className="w-8 h-8 text-primary" />
+                    </motion.div>
 
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.4 + index * 0.15 }}
-                    className="text-muted-foreground leading-relaxed mb-6"
-                  >
-                    {solution.description}
-                  </motion.p>
+                    <motion.h3
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 + index * 0.15 }}
+                      className="text-2xl font-bold mb-4 text-foreground"
+                    >
+                      {solution.title}
+                    </motion.h3>
 
-                  <ul className="space-y-3">
-                    {solution.features.map((feature, featureIndex) => (
-                      <motion.li
-                        key={feature}
-                        custom={featureIndex}
-                        variants={featureVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        className="flex items-center gap-3 text-foreground"
-                      >
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          whileInView={{ scale: 1 }}
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.4 + index * 0.15 }}
+                      className="text-muted-foreground leading-relaxed mb-6"
+                    >
+                      {solution.description}
+                    </motion.p>
+
+                    <ul className="space-y-3">
+                      {solution.features.map((feature, featureIndex) => (
+                        <motion.li
+                          key={feature}
+                          custom={featureIndex}
+                          variants={featureVariants}
+                          initial="hidden"
+                          whileInView="visible"
                           viewport={{ once: true }}
-                          transition={{
-                            type: "spring",
-                            delay: 0.6 + featureIndex * 0.1,
-                          }}
-                          className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0"
+                          className="flex items-center gap-3 text-foreground"
                         >
-                          <Check className="w-3 h-3 text-primary" />
-                        </motion.div>
-                        <span className="text-sm font-medium">{feature}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            whileInView={{ scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{
+                              type: "spring",
+                              delay: 0.6 + featureIndex * 0.1,
+                            }}
+                            className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0"
+                          >
+                            <Check className="w-3 h-3 text-primary" />
+                          </motion.div>
+                          <span className="text-sm font-medium">{feature}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
 
-                {/* Animated border glow on hover */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  className="absolute inset-0 rounded-2xl border-2 border-primary/30 pointer-events-none"
-                />
-              </div>
-            </motion.div>
-          ))}
+                  {/* Animated border glow on hover */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    className="absolute inset-0 rounded-2xl border-2 border-primary/30 pointer-events-none"
+                  />
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

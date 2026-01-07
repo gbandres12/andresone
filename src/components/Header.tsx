@@ -3,15 +3,18 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import logo from "@/assets/logo-andres.png";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const navLinks = [
-    { label: "Benefícios", href: "#beneficios" },
-    { label: "Soluções", href: "#solucoes" },
-    { label: "Casos de Uso", href: "#casos" },
-    { label: "Sobre Nós", href: "#sobre" },
+    { label: t.nav.benefits, href: "#beneficios" },
+    { label: t.nav.solutions, href: "#solucoes" },
+    { label: t.nav.useCases, href: "#casos" },
+    { label: t.nav.about, href: "#sobre" },
   ];
 
   return (
@@ -40,23 +43,27 @@ const Header = () => {
             ))}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher />
             <Button
               variant="hero"
               size="default"
               onClick={() => window.open("https://wa.me/5592995096571", "_blank")}
             >
-              Fale Conosco
+              {t.nav.contactUs}
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-foreground p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="md:hidden flex items-center gap-3">
+            <LanguageSwitcher />
+            <button
+              className="text-foreground p-2"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -83,7 +90,7 @@ const Header = () => {
               className="w-full mt-2"
               onClick={() => window.open("https://wa.me/5592995096571", "_blank")}
             >
-              Fale Conosco
+              {t.nav.contactUs}
             </Button>
           </motion.nav>
         )}
