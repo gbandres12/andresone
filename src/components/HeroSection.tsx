@@ -2,8 +2,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Sparkles, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRef } from "react";
-import heroImage from "@/assets/hero-astronaut.png";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { Typewriter } from "./ui/typewriter";
 
 const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,161 +13,162 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
-  const whatsappMessage = language === "pt" 
+  const whatsappMessage = language === "pt"
     ? "Olá! Gostaria de agendar uma demonstração."
     : "Hello! I would like to schedule a demonstration.";
+
+  // Animation variants for the "Blocks" reveal
+  const blockVariants = {
+    hidden: { clipPath: "inset(100% 0 0 0)", y: 50, opacity: 0 },
+    visible: (i: number) => ({
+      clipPath: "inset(0% 0 0 0)",
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 1.2,
+        delay: 0.5 + i * 0.2,
+        ease: [0.16, 1, 0.3, 1] as any, // Fixing Framer Motion typing
+      },
+    }),
+  };
+
+  const typewriterWords = language === "pt"
+    ? ["Inteligência Artificial", "Sistemas Inteligentes", "Automação Preditiva", "Futuro Digital"]
+    : ["Artificial Intelligence", "Smart Systems", "Predictive Automation", "Digital Future"];
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background Image with Parallax */}
-      <motion.div
-        style={{ y, scale }}
-        className="absolute inset-0 z-0"
-      >
-        <img
-          src={heroImage}
-          alt={t.hero.heroImageAlt}
-          className="w-full h-full object-cover object-center"
-        />
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-background/70" />
-      </motion.div>
+      {/* 3D Perspective Grid Background (The Horizon) */}
+      <div className="absolute inset-0 z-0 bg-background">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-background z-10" />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: [0.1, 0.5, 0.1],
-              y: [0, -100, 0],
-              x: [0, Math.random() * 50 - 25, 0],
-            }}
-            transition={{
-              duration: 8 + Math.random() * 6,
-              repeat: Infinity,
-              delay: i * 0.3,
-            }}
-            className="absolute w-1 h-1 bg-primary rounded-full"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              boxShadow: "0 0 10px hsl(var(--primary))",
-            }}
-          />
-        ))}
+        {/* Floor Grid */}
+        <div
+          className="absolute bottom-0 left-[-50%] w-[200%] h-[100%] origin-bottom transition-transform duration-1000"
+          style={{
+            perspective: "1000px",
+            transform: "rotateX(60deg)",
+            background: `
+              linear-gradient(to right, hsl(var(--primary)/0.1) 1px, transparent 1px),
+              linear-gradient(to bottom, hsl(var(--primary)/0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+            animation: "grid-move 20s linear infinite"
+          }}
+        />
+
+        {/* Floating Light Beams */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ x: "-100%", opacity: 0 }}
+              animate={{
+                x: "200%",
+                opacity: [0, 0.2, 0],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 4,
+                repeat: Infinity,
+                delay: i * 2,
+                ease: "linear"
+              }}
+              className="absolute h-[1px] w-[500px] bg-gradient-to-r from-transparent via-primary to-transparent"
+              style={{ top: `${15 + i * 10}%` }}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Glowing orbs */}
       <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/30 rounded-full blur-[100px] z-5"
-      />
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-[120px] z-5"
-      />
-
-      <motion.div
-        style={{ y: textY, opacity }}
+        style={{ y: textY, scale, opacity }}
         className="container mx-auto px-4 relative z-20"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center max-w-5xl mx-auto"
-        >
+        <motion.div className="text-center max-w-5xl mx-auto">
           {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-primary mb-8"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full glass-card border-glow text-primary mb-12 overflow-hidden shadow-2xl"
           >
             <motion.div
               animate={{ rotate: [0, 360] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
             >
-              <Rocket size={18} />
+              <Rocket size={16} />
             </motion.div>
-            <span className="text-sm font-semibold tracking-wide">
+            <span className="text-[10px] md:text-xs font-black tracking-[0.3em] uppercase">
               {t.hero.badge}
             </span>
-            <motion.div
-              animate={{ scale: [1, 1.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Sparkles size={16} />
-            </motion.div>
           </motion.div>
 
-          {/* Main Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-5xl md:text-6xl lg:text-8xl font-bold mb-8 leading-[1.1] tracking-tight"
-          >
+          {/* Main Heading - Kinetic Block Reveal + Typewriter */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[1.1] md:leading-[1] tracking-tighter">
             <motion.span
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-foreground block"
+              custom={0}
+              variants={blockVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-foreground block mb-2"
             >
               {t.hero.title1}
             </motion.span>
-            <motion.span
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="text-gradient block mt-2"
+            <motion.div
+              custom={1}
+              variants={blockVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-gradient min-h-[1.2em]"
             >
-              {t.hero.title2}
-            </motion.span>
-          </motion.h1>
+              <Typewriter
+                text={typewriterWords}
+                speed={70}
+                waitTime={2500}
+                deleteSpeed={40}
+                className="text-gradient"
+                cursorChar="_"
+                cursorClassName="text-primary font-light"
+              />
+            </motion.div>
+          </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle with reveal */}
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1 }}
-            className="text-lg md:text-xl lg:text-2xl text-foreground/80 max-w-3xl mx-auto mb-12 leading-relaxed font-light"
+            transition={{ duration: 1, delay: 1.2 }}
+            className="text-lg md:text-xl text-foreground/60 max-w-2xl mx-auto mb-12 font-light tracking-tight leading-relaxed"
           >
             {t.hero.subtitle}{" "}
-            <strong className="text-foreground font-semibold">{t.hero.subtitleBold1}</strong>{" "}
+            <strong className="text-primary/80 font-medium underline decoration-primary/20 decoration-2 underline-offset-8">
+              {t.hero.subtitleBold1}
+            </strong>{" "}
             {t.hero.subtitleAnd}{" "}
-            <strong className="text-foreground font-semibold">{t.hero.subtitleBold2}</strong>.
+            <strong className="text-primary/80 font-medium underline decoration-primary/20 decoration-2 underline-offset-8">
+              {t.hero.subtitleBold2}
+            </strong>.
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+            transition={{ duration: 0.6, delay: 1.5 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
             <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
+              className="w-full sm:w-auto"
             >
               <Button
                 variant="whatsapp"
@@ -178,18 +179,19 @@ const HeroSection = () => {
                     "_blank"
                   )
                 }
-                className="group shadow-2xl shadow-[hsl(142_70%_45%/0.3)]"
+                className="group w-full sm:w-auto px-10 py-6 text-lg rounded-2xl shadow-[0_20px_40px_-15px_rgba(var(--primary),0.3)] hover:shadow-primary/40 transition-all border border-primary/20"
               >
                 {t.hero.ctaDemo}
                 <ArrowRight
-                  className="group-hover:translate-x-1 transition-transform"
+                  className="ml-3 group-hover:translate-x-2 transition-transform"
                   size={20}
                 />
               </Button>
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
+              className="w-full sm:w-auto"
             >
               <Button
                 variant="glass"
@@ -199,64 +201,25 @@ const HeroSection = () => {
                     .getElementById("solucoes")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="backdrop-blur-xl border-foreground/30"
+                className="w-full sm:w-auto px-10 py-6 text-lg rounded-2xl backdrop-blur-3xl border-white/5 hover:bg-white/10 transition-all"
               >
                 {t.hero.ctaSolutions}
               </Button>
             </motion.div>
           </motion.div>
-
-          {/* Trust indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 0.8 }}
-            className="mt-16 flex items-center justify-center gap-8 text-muted-foreground/60"
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium">{t.hero.support}</span>
-            </div>
-            <div className="hidden sm:block w-px h-4 bg-muted-foreground/30" />
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <span className="text-sm font-medium">{t.hero.clients}</span>
-            </div>
-            <div className="hidden md:block w-px h-4 bg-muted-foreground/30" />
-            <div className="hidden md:flex items-center gap-2">
-              <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-sm font-medium">{t.hero.customAi}</span>
-            </div>
-          </motion.div>
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        style={{ opacity }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
-      >
-        <motion.div
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="flex flex-col items-center gap-2"
-        >
-          <span className="text-xs text-muted-foreground/60 uppercase tracking-widest">{t.hero.scroll}</span>
-          <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
-            <motion.div
-              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-primary rounded-full"
-            />
-          </div>
-        </motion.div>
-      </motion.div>
+      {/* Hero-specific styles for the 3D Grid */}
+      <style>{`
+        @keyframes grid-move {
+          0% { background-position: 0 0; }
+          100% { background-position: 0 60px; }
+        }
+      `}</style>
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent z-10" />
     </section>
   );
 };
