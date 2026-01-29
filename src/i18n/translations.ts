@@ -132,6 +132,62 @@ export const translations = {
       location: "Santarém, Pará - Brasil",
       copyright: "Andres Technologies. Todos os direitos reservados.",
     },
+
+    // Simulator Section
+    simulator: {
+      title: "Simulador de",
+      titleHighlight: "Estratégia AI",
+      subtitle: "Descubra como a Inteligência Artificial pode revolucionar sua operação em segundos.",
+      steps: {
+        step1: {
+          question: "Qual área da sua empresa você quer revolucionar?",
+          options: [
+            { id: "sales", label: "Vendas & Marketing", icon: "TrendingUp" },
+            { id: "ops", label: "Operações & Logística", icon: "Settings" },
+            { id: "service", label: "Atendimento ao Cliente", icon: "MessageSquare" },
+            { id: "finance", label: "Financeiro & RH", icon: "BarChart" },
+          ]
+        },
+        step2: {
+          question: "Qual é o seu maior desafio atual?",
+          options: {
+            sales: ["Leads demoram a ser atendidos", "Processo de CRM é muito manual", "Dificuldade em personalizar propostas"],
+            ops: ["Controle de estoque ineficiente", "Processos dependem de papel/planilha", "Falta de visibilidade da operação"],
+            service: ["Muitas perguntas repetitivas no WhatsApp", "Tempo de espera elevado", "Falta de suporte após o horário comercial"],
+            finance: ["Erros na emissão de notas/impostos", "Dificuldade em conciliar o caixa", "Processos de RH lentos (folha/contratação)"],
+          }
+        },
+        step3: {
+          processing: "Analisando processos...",
+          magic: "Criando arquitetura de IA personalizada...",
+        },
+        step4: {
+          resultPrefix: "Sua empresa pode automatizar até",
+          resultSuffix: "da operação nesta área.",
+          recommendation: "Recomendação Estratégica",
+          cta: "Baixar Diagnóstico no WhatsApp",
+          reset: "Novo Diagnóstico",
+          solutions: {
+            sales: {
+              title: "Agente SDR Autônomo 24/7",
+              desc: "Implementação de IA que qualifica leads e agenda reuniões automaticamente direto no seu CRM."
+            },
+            ops: {
+              title: "Gestão Preditiva com PDV Inteligente",
+              desc: "Integração total do estoque com análise de IA para prever compras e evitar rupturas."
+            },
+            service: {
+              title: "Atendimento Híbrido Avançado",
+              desc: "Chatbots que resolvem 80% das dúvidas e escalam para humanos apenas em casos complexos."
+            },
+            finance: {
+              title: "Backoffice Inteligente",
+              desc: "Automação total de lançamentos e integração fiscal para erro zero na sua contabilidade."
+            }
+          }
+        }
+      }
+    }
   },
 
   en: {
@@ -267,6 +323,62 @@ export const translations = {
       location: "Santarém, Pará - Brazil",
       copyright: "Andres Technologies. All rights reserved.",
     },
+
+    // Simulator Section
+    simulator: {
+      title: "AI Strategy",
+      titleHighlight: "Simulator",
+      subtitle: "Discover how Artificial Intelligence can revolutionize your operation in seconds.",
+      steps: {
+        step1: {
+          question: "Which area of your business do you want to revolutionize?",
+          options: [
+            { id: "sales", label: "Sales & Marketing", icon: "TrendingUp" },
+            { id: "ops", label: "Operations & Logistics", icon: "Settings" },
+            { id: "service", label: "Customer Service", icon: "MessageSquare" },
+            { id: "finance", label: "Finance & HR", icon: "BarChart" },
+          ]
+        },
+        step2: {
+          question: "What is your biggest current challenge?",
+          options: {
+            sales: ["Leads take too long to be answered", "CRM process is very manual", "Difficulty in personalizing proposals"],
+            ops: ["Inefficient inventory control", "Processes depend on paper/spreadsheets", "Lack of operational visibility"],
+            service: ["Many repetitive questions on WhatsApp", "High waiting time", "Lack of after-hours support"],
+            finance: ["Errors in issuing invoices/taxes", "Difficulty in reconciling cash", "Slow HR processes (payroll/hiring)"],
+          }
+        },
+        step3: {
+          processing: "Analyzing processes...",
+          magic: "Creating custom AI architecture...",
+        },
+        step4: {
+          resultPrefix: "Your company can automate up to",
+          resultSuffix: "of operations in this area.",
+          recommendation: "Strategic Recommendation",
+          cta: "Download Diagnosis on WhatsApp",
+          reset: "New Diagnosis",
+          solutions: {
+            sales: {
+              title: "24/7 Autonomous SDR Agent",
+              desc: "AI implementation that qualifies leads and schedules meetings automatically directly in your CRM."
+            },
+            ops: {
+              title: "Predictive Management with Smart POS",
+              desc: "Total inventory integration with AI analysis to predict purchases and avoid stockouts."
+            },
+            service: {
+              title: "Advanced Hybrid Support",
+              desc: "Chatbots that solve 80% of questions and scale to humans only for complex cases."
+            },
+            finance: {
+              title: "Intelligent Backoffice",
+              desc: "Total automation of entries and tax integration for zero error in your accounting."
+            }
+          }
+        }
+      }
+    }
   },
 };
 
